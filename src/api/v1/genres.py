@@ -2,10 +2,10 @@ from http import HTTPStatus
 from typing import Optional
 from uuid import UUID
 
-from api.v1.common import QueryStr, get_parameters
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
+from api.v1.common import QueryStr, get_parameters
 from api.v1.message_texts import MessageText
 from services.genres import GenreService, get_service
 

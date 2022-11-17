@@ -13,6 +13,7 @@ build/
 develop-eggs/
 dist/
 downloads/
+.pytest_cashe/
 eggs/
 .eggs/
 lib/
@@ -139,3 +140,4 @@ dmypy.json
 cython_debug/
 
 .idea/
+!/src/tests/functional/src/.pytest_cache/
