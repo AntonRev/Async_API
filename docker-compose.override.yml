@@ -1,0 +1,8 @@
+version: '3'
+services:
+  redis:
+    ports:
+      - "6379:6379"
+  elastic:
+    ports:
+      - "9200:9200"

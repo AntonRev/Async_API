@@ -1,0 +1,31 @@
+version: '3'
+services:
+  fastapi:
+    build: .
+    environment:
+      REDIS_HOST: redis
+      ELASTIC_HOST: elastic
+    depends_on:
+      - redis
+      - elastic
+    command: ["./wait-for-it.sh", "elastic:9200", "--", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+  redis:
+    image: redis:7.0.5
+  elastic:
+    image: elasticsearch:7.7.0
+    environment:
+      discovery.type: single-node
+    volumes:
+      - elastic-data:/usr/share/elasticsearch/data
+  nginx:
+    image: nginx:1.23.2
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./configs:/etc/nginx/conf.d:ro
+    depends_on:
+      - fastapi
+    ports:
+      - "80:80"
+
+volumes:
+  elastic-data:
