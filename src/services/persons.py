@@ -3,16 +3,17 @@ from typing import Optional
 from uuid import UUID
 
 from aioredis import Redis
-from api.v1.common import QueryStr, Sorting
-from db.elastic import get_elastic
-from db.redis import get_redis
 from elasticsearch import AsyncElasticsearch, NotFoundError
 from fastapi import Depends
-from models.person import Person
 
+from api.v1.common import QueryStr, Sorting
+from core.configs import config
+from db.elastic import get_elastic
+from db.redis import get_redis
+from models.person import Person
 from services.redis_heplers import RedisHelper
 
-CACHE_EXPIRE_IN_SECONDS = 60 * 5  # 5 минут
+CACHE_EXPIRE_IN_SECONDS = config.CACHE_EXPIRE_IN_SECONDS
 ELASTIC_INDEX = 'persons'
 
 

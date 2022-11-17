@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     # Настройки Redis
     REDIS_HOST: str = Field('127.0.0.1', env='REDIS_HOST')
     REDIS_PORT: int = Field(6379, env='REDIS_PORT')
+    CACHE_EXPIRE_IN_SECONDS: int = Field(300, env='CACHE_EXPIRE_IN_SECONDS')  # 5 минут
     # Настройки Elasticsearch
     ELASTIC_HOST: str = Field('127.0.0.1', env='ELASTIC_HOST')
     ELASTIC_PORT: int = Field(9200, env='ELASTIC_PORT')
