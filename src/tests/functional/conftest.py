@@ -24,7 +24,11 @@ def fill_test_data(es_client: AsyncElasticsearch):
         es_data = [query_data for _ in range(count)]
         bulk_query = []
         for row in es_data:
-            _id = str(uuid.uuid4()) if es_id_field is None else es_id_field
+            if es_id_field is None:
+                _id = str(uuid.uuid4())
+            else:
+                _id = es_id_field
+                row['id'] = es_id_field
             bulk_query.extend([
                 json.dumps({'index': {'_index': es_index, '_id': _id}}),
                 json.dumps(row)
