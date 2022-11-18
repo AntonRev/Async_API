@@ -27,7 +27,7 @@ class QueryData:
 
     GENRE = {
         'id': str(uuid.uuid4()),
-        'name': 'comedy',
+        'name': 'Comedy',
         'description': 'Well... comedy is very subjective.',
         'films': [str(uuid.uuid4()), str(uuid.uuid4()), str(uuid.uuid4())]
     }

@@ -15,7 +15,7 @@ class QueryStr(BaseModel):
     page_number: int
 
 
-def get_parameters(_page_size: int = Query(10, ge=1, alias='page[size]'),
-                   _page_number: int = Query(1, ge=1, alias='page[number]'),
+def get_parameters(_page_size: int = Query(10, ge=1, le=10000, alias='page[size]'),
+                   _page_number: int = Query(1, ge=1, le=10000, alias='page[number]'),
                    _sort: Sorting = Query(Sorting.NAME, alias='sort')):
     return QueryStr(page_size=_page_size, sort=_sort, page_number=_page_number)

@@ -45,8 +45,8 @@ class Film(FilmBasic):
             description="Список кинопроизведений, разбитый по страницам, опционально - отсортированный "
                         "и отфильтрованный по жанрам",
             response_description="Название и рейтинг фильма")
-async def films_list(page: int = Query(default=1, ge=1, alias='page[number]'),
-                     size: int = Query(default=10, ge=1, alias='page[size]'),
+async def films_list(page: int = Query(default=1, ge=1, le=10000, alias='page[number]'),
+                     size: int = Query(default=10, ge=1, le=10000, alias='page[size]'),
                      genre: Optional[str] = Query(default=None, alias='filter[genre]'),
                      sort: Optional[FilmSorting] = None,
                      film_service: FilmService = Depends(get_film_service)) -> list[FilmBasic]:
@@ -59,8 +59,8 @@ async def films_list(page: int = Query(default=1, ge=1, alias='page[number]'),
             description="Полнотекстовый поиск по кинопроизведениям",
             response_description="Название и рейтинг фильма")
 async def films_search(query: str,
-                       page: int = Query(default=1, ge=1, alias='page[number]'),
-                       size: int = Query(default=10, ge=1, alias='page[size]'),
+                       page: int = Query(default=1, ge=1, le=10000, alias='page[number]'),
+                       size: int = Query(default=10, ge=1, le=10000, alias='page[size]'),
                        film_service: FilmService = Depends(get_film_service)) -> list[FilmBasic]:
     films = await film_service.search(query, page, size)
     return [FilmBasic(**f.dict()) for f in films]
