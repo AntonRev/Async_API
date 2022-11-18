@@ -1,8 +1,9 @@
 import logging.config
 import time
 
-from core.logger import LOGGING
 from elasticsearch import Elasticsearch
+
+from core.logger import LOGGING
 from tests.functional.settings import TestSettings
 
 es_host = TestSettings().es_host

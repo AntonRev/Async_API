@@ -3,6 +3,7 @@ import logging
 from logging.config import dictConfig
 
 import pytest
+
 from core.logger import LOGGING
 from tests.functional.settings import test_settings
 from tests.functional.testdata.query_data import QueryData

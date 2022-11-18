@@ -1,9 +1,10 @@
 import logging.config
 import time
 
-from core.logger import LOGGING
 from redis import Redis
 from redis.exceptions import ConnectionError
+
+from core.logger import LOGGING
 from tests.functional.settings import TestSettings
 
 redis_host = TestSettings().redis_host
