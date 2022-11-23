@@ -14,6 +14,7 @@ log = logging.getLogger(__name__)
 query = QueryData()
 ES_INDEX = 'genres'
 
+
 @pytest.mark.parametrize(
     'query_data, expected_answer',
     [
