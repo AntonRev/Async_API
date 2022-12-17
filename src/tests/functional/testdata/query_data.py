@@ -1,4 +1,3 @@
-import datetime
 import uuid
 
 
@@ -20,9 +19,6 @@ class QueryData:
             {'id': str(uuid.uuid4()), 'name': 'Ben'},
             {'id': str(uuid.uuid4()), 'name': 'Howard'}
         ],
-        'created_at': datetime.datetime.now().isoformat(),
-        'updated_at': datetime.datetime.now().isoformat(),
-        'film_work_type': 'movie'
     }
 
     GENRE = {

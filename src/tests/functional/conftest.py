@@ -20,7 +20,6 @@ def fill_test_data(es_client: AsyncElasticsearch):
         """
         es_id_field for testing ID, use with count=1
         """
-        # TODO: вместо query_data использовать библиотеку factory-boy
         es_data = [query_data for _ in range(count)]
         bulk_query = []
         for row in es_data:
