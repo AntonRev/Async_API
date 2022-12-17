@@ -1,6 +1,7 @@
 from logging.config import dictConfig
 
 from pydantic import BaseSettings, Field
+
 from tests.functional.logger import LOGGING
 
 

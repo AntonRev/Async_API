@@ -3,10 +3,10 @@ import json
 import logging
 import uuid
 
-import aiohttp
 import pytest_asyncio
 from aiohttp import ClientSession
 from elasticsearch import AsyncElasticsearch
+
 from tests.functional.settings import test_settings
 from tests.functional.testdata.mapping import Mapping
 
@@ -45,7 +45,7 @@ def fill_test_data(es_client: AsyncElasticsearch):
 
 @pytest_asyncio.fixture
 def make_get_request(http_client: ClientSession):
-    async def get_request(uri: str, query_data: str):
+    async def get_request(uri: str, query_data: str = None):
         response = http_client.get(uri, params=query_data)
         return await response
 
@@ -53,9 +53,11 @@ def make_get_request(http_client: ClientSession):
 
 
 @pytest_asyncio.fixture
-async def clear_elastic(http_client):
-    response = http_client.delete(f'http://{test_settings.es_host}:9200/_all')
-    return response
+def clear_elastic(http_client):
+    async def clear_index(index: str = "_all"):
+        await http_client.delete(f'http://{test_settings.es_host}:9200/{index}')
+
+    return clear_index
 
 
 @pytest_asyncio.fixture(scope='session')
@@ -89,6 +91,6 @@ def event_loop():
 
 @pytest_asyncio.fixture(scope='session')
 async def http_client():
-    session = aiohttp.ClientSession()
+    session = ClientSession()
     yield session
     await session.close()
