@@ -1,0 +1,41 @@
+version: '3'
+services:
+  fastapi:
+    build: ../../../.
+    image: fastapi-image
+    environment:
+      REDIS_HOST: redis
+      ELASTIC_HOST: elastic
+      CACHE_EXPIRE_IN_SECONDS: 5
+    depends_on:
+      - redis
+      - elastic
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+    ports:
+      - "8000:8000"
+  redis:
+    image: redis:7.0.5
+    expose:
+      - 6379
+  elastic:
+    image: elasticsearch:7.7.0
+    environment:
+      discovery.type: single-node
+    expose:
+      - 9200
+  tests:
+    image: fastapi-image
+    environment:
+      FASTAPI_HOST: fastapi
+      REDIS_HOST: redis
+      ELASTIC_HOST: elastic
+    depends_on:
+      - redis
+      - elastic
+      - fastapi
+    entrypoint: >
+      sh -c "pip install -r src/tests/functional/requirements.txt --no-warn-script-location
+      && python3 src/tests/functional/utils/wait_for_es.py
+      && python3 src/tests/functional/utils/wait_for_redis.py
+      && python3 -m pytest src/tests/functional/src"
+

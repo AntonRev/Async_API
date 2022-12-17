@@ -5,6 +5,7 @@ services:
     environment:
       REDIS_HOST: redis
       ELASTIC_HOST: elastic
+      CACHE_EXPIRE_IN_SECONDS: 300
     depends_on:
       - redis
       - elastic

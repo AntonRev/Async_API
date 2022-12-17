@@ -2,10 +2,10 @@ from http import HTTPStatus
 from typing import Optional
 from uuid import UUID
 
-from api.v1.common import QueryStr, Sorting, get_parameters
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 
+from api.v1.common import QueryStr, Sorting, get_parameters
 from api.v1.message_texts import MessageText
 from services.persons import PersonService, get_service
 
@@ -40,8 +40,8 @@ async def person_list(query: QueryStr = Depends(get_parameters),
             description="Полнотекстовый поиск по актёрам",
             response_description="Полное имя и ID")
 async def person_search_list(query: str,
-                             page: int = Query(default=1, ge=1, alias='page[number]'),
-                             size: int = Query(default=10, ge=1, alias='page[size]'),
+                             page: int = Query(default=1, ge=1, le=10000, alias='page[number]'),
+                             size: int = Query(default=10, ge=1, le=10000, alias='page[size]'),
                              sort: Optional[Sorting] = None,
                              person_service: PersonService = Depends(get_service)) -> list[PersonBase]:
     persons = await person_service.search(query, page, size, sort)
