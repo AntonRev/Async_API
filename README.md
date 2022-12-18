@@ -8,7 +8,7 @@ API для получения информации о фильмах, персо
 
 Подробности про методы и аргументы - см. http://HOST:PORT/api/openapi.
 
-Репозиторий: https://github.com/AntonRev/Async_API_sprint_1/
+Репозиторий: https://github.com/AntonRev/Async_API_sprint_2/
 
 ## Запуск
 
