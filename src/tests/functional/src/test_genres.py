@@ -8,6 +8,7 @@ import pytest
 
 from core.logger import LOGGING
 from tests.functional.settings import test_settings
+from tests.functional.src.common import clear_elastic, make_get_request
 from tests.functional.testdata.query_data import QueryData
 
 dictConfig(LOGGING)
@@ -43,8 +44,8 @@ ES_INDEX = 'genres'
     ]
 )
 @pytest.mark.asyncio
-async def test_genre_all(fill_test_data, make_get_request, clear_elastic, query_data, expected_answer):
-    await clear_elastic(ES_INDEX)
+async def test_genre_all(fill_test_data, http_client, query_data, expected_answer):
+    await clear_elastic(http_client, ES_INDEX)
     log.info('Elastic clear')
     # Генерируем данные для ES
     await fill_test_data(es_index=ES_INDEX, count=query_data['count'], query_data=query.GENRE)
@@ -56,7 +57,7 @@ async def test_genre_all(fill_test_data, make_get_request, clear_elastic, query_
                    'page[size]': query_data['size']
                    }
 
-    response = await make_get_request(url, query_param)
+    response = await make_get_request(http_client, url, query_param)
     resp = await response.json()
 
     # Проверяем ответ
@@ -65,14 +66,14 @@ async def test_genre_all(fill_test_data, make_get_request, clear_elastic, query_
 
 
 @pytest.mark.asyncio
-async def test_genre_id(fill_test_data, make_get_request):
+async def test_genre_id(fill_test_data, http_client):
     # Генерируем данные для ES
     id_genre = str(uuid.uuid4())
     await fill_test_data(es_index=ES_INDEX, count=1, query_data=query.GENRE, es_id_field=id_genre)
     await asyncio.sleep(1)  # Pause to fill the database
 
     url = f'http://{test_settings.service_url}:8000/api/v1/genres/{id_genre}'
-    response = await make_get_request(url)
+    response = await make_get_request(http_client, url)
     resp = await response.json()
     # Проверяем ответ
     assert response.status == http.HTTPStatus.OK
@@ -80,23 +81,23 @@ async def test_genre_id(fill_test_data, make_get_request):
 
 
 @pytest.mark.asyncio
-async def test_genre_redis(fill_test_data, make_get_request, clear_elastic):
+async def test_genre_redis(http_client, fill_test_data):
     # Генерируем данные для ES
     id_genre = str(uuid.uuid4())
     await fill_test_data(es_index=ES_INDEX, count=1, query_data=query.GENRE, es_id_field=id_genre)
     await asyncio.sleep(1)  # Pause to fill the database
 
     url = f'http://{test_settings.service_url}:8000/api/v1/genres/{id_genre}'
-    response = await make_get_request(url)
+    response = await make_get_request(http_client, url)
     resp = await response.json()
     # Проверяем ответ
     assert response.status == http.HTTPStatus.OK
     assert resp['id'] == id_genre
     # Очистка Elastic для проверки Redis
-    await clear_elastic(ES_INDEX)
+    await clear_elastic(http_client, ES_INDEX)
     log.info('Elastic clear')
     url = f'http://{test_settings.service_url}:8000/api/v1/genres/{id_genre}'
-    response = await make_get_request(url)
+    response = await make_get_request(http_client, url)
     resp = await response.json()
     assert response.status == http.HTTPStatus.OK
     assert resp['id'] == id_genre

@@ -42,23 +42,6 @@ def fill_test_data(es_client: AsyncElasticsearch):
     return fill
 
 
-@pytest_asyncio.fixture
-def make_get_request(http_client: ClientSession):
-    async def get_request(uri: str, query_data: str = None):
-        response = http_client.get(uri, params=query_data)
-        return await response
-
-    return get_request
-
-
-@pytest_asyncio.fixture
-def clear_elastic(http_client):
-    async def clear_index(index: str = "_all"):
-        await http_client.delete(f'http://{test_settings.es_host}:9200/{index}')
-
-    return clear_index
-
-
 @pytest_asyncio.fixture(scope='session')
 async def es_client():
     client = AsyncElasticsearch(hosts=f'{test_settings.es_host}',
@@ -93,3 +76,19 @@ async def http_client():
     session = ClientSession()
     yield session
     await session.close()
+
+
+# def make_get_request(http_client: ClientSession):
+#     async def get_request(uri: str, query_data: str = None):
+#         response = http_client.get(uri, params=query_data)
+#         return await response
+#
+#     return get_request
+#
+#
+#
+# def clear_elastic(http_client):
+#     async def clear_index(index: str = "_all"):
+#         await http_client.delete(f'http://{test_settings.es_host}:9200/{index}')
+#
+#     return clear_index
