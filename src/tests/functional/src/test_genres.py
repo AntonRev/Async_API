@@ -1,4 +1,5 @@
 import asyncio
+import http
 import logging
 import uuid
 from logging.config import dictConfig
@@ -20,11 +21,11 @@ ES_INDEX = 'genres'
     [
         (
                 {'count': 50, 'size': 100},
-                {'status': 200, 'length': 50}
+                {'status': http.HTTPStatus.OK, 'length': 50}
         ),
         (
                 {'count': 50, 'size': 10, 'name': 'Ann'},
-                {'status': 200, 'length': 10}
+                {'status': http.HTTPStatus.OK, 'length': 10}
         ),
         (
                 {'count': 50, 'size': 99999},
@@ -74,7 +75,7 @@ async def test_genre_id(fill_test_data, make_get_request):
     response = await make_get_request(url)
     resp = await response.json()
     # Проверяем ответ
-    assert response.status == 200
+    assert response.status == http.HTTPStatus.OK
     assert resp['id'] == id_genre
 
 
@@ -89,7 +90,7 @@ async def test_genre_redis(fill_test_data, make_get_request, clear_elastic):
     response = await make_get_request(url)
     resp = await response.json()
     # Проверяем ответ
-    assert response.status == 200
+    assert response.status == http.HTTPStatus.OK
     assert resp['id'] == id_genre
     # Очистка Elastic для проверки Redis
     await clear_elastic(ES_INDEX)
@@ -97,5 +98,5 @@ async def test_genre_redis(fill_test_data, make_get_request, clear_elastic):
     url = f'http://{test_settings.service_url}:8000/api/v1/genres/{id_genre}'
     response = await make_get_request(url)
     resp = await response.json()
-    assert response.status == 200
+    assert response.status == http.HTTPStatus.OK
     assert resp['id'] == id_genre

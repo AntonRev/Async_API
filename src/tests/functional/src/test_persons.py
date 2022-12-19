@@ -1,9 +1,11 @@
 import asyncio
+import http
 import logging
 import uuid
 from logging.config import dictConfig
 
 import pytest
+
 
 from core.logger import LOGGING
 from tests.functional.settings import test_settings
@@ -20,23 +22,23 @@ ES_INDEX = 'persons'
     [
         (
                 {'count': 50, 'size': 100, 'name': 'Ann'},
-                {'status': 200, 'length': 50}
+                {'status': http.HTTPStatus.OK, 'length': 50}
         ),
         (
                 {'count': 50, 'size': 10, 'name': 'Ann'},
-                {'status': 200, 'length': 10}
+                {'status': http.HTTPStatus.OK, 'length': 10}
         ),
         (
                 {'count': 50, 'size': 99999, 'name': 'Ann'},
-                {'status': 422, 'length': 1}
+                {'status': http.HTTPStatus.UNPROCESSABLE_ENTITY, 'length': 1}
         ),
         (
                 {'count': 50, 'size': 0, 'name': 'Ann'},
-                {'status': 422, 'length': 1}
+                {'status': http.HTTPStatus.UNPROCESSABLE_ENTITY, 'length': 1}
         ),
         (
                 {'count': 50, 'size': -1, 'name': 'Ann'},
-                {'status': 422, 'length': 1}
+                {'status': http.HTTPStatus.UNPROCESSABLE_ENTITY, 'length': 1}
         )
 
     ]
@@ -74,7 +76,7 @@ async def test_person_id(fill_test_data, make_get_request):
     response = await make_get_request(url)
     resp = await response.json()
     # Проверяем ответ
-    assert response.status == 200
+    assert response.status == http.HTTPStatus.OK
     assert resp['id'] == id_person
 
 
@@ -83,23 +85,23 @@ async def test_person_id(fill_test_data, make_get_request):
     [
         (
                 {'count': 50, 'size': 100, 'name': 'Ann'},
-                {'status': 200, 'length': 50}
+                {'status': http.HTTPStatus.OK, 'length': 50}
         ),
         (
                 {'count': 50, 'size': 10, 'name': 'Ann'},
-                {'status': 200, 'length': 10}
+                {'status': http.HTTPStatus.OK, 'length': 10}
         ),
         (
                 {'count': 50, 'size': 99999, 'name': 'Ann'},
-                {'status': 422, 'length': 1}
+                {'status': http.HTTPStatus.UNPROCESSABLE_ENTITY, 'length': 1}
         ),
         (
                 {'count': 50, 'size': 0, 'name': 'Ann'},
-                {'status': 422, 'length': 1}
+                {'status': http.HTTPStatus.UNPROCESSABLE_ENTITY, 'length': 1}
         ),
         (
                 {'count': 50, 'size': -1, 'name': 'Ann'},
-                {'status': 422, 'length': 1}
+                {'status': http.HTTPStatus.UNPROCESSABLE_ENTITY, 'length': 1}
         )
 
     ]
@@ -137,12 +139,12 @@ async def test_person_redis(fill_test_data, make_get_request, clear_elastic):
     response = await make_get_request(url)
     resp = await response.json()
     # Проверяем ответ
-    assert response.status == 200
+    assert response.status == http.HTTPStatus.OK
     assert resp['id'] == id_person
     # Очистка Elastic для проверки Redis
     await clear_elastic(ES_INDEX)
     log.info('Elastic clear')
     response = await make_get_request(url)
     resp = await response.json()
-    assert response.status == 200
+    assert response.status == http.HTTPStatus.OK
     assert resp['id'] == id_person

@@ -1,4 +1,5 @@
 import asyncio
+import http
 import logging
 import uuid
 from logging.config import dictConfig
@@ -20,23 +21,23 @@ ES_INDEX = 'movies'
     [
         (
                 {'count': 50, 'size': 100, 'name': 'The Star'},
-                {'status': 200, 'length': 50}
+                {'status': http.HTTPStatus.OK, 'length': 50}
         ),
         (
                 {'count': 50, 'size': 10, 'name': 'The Star'},
-                {'status': 200, 'length': 10}
+                {'status': http.HTTPStatus.OK, 'length': 10}
         ),
         (
                 {'count': 50, 'size': 99999, 'name': 'The Star'},
-                {'status': 422, 'length': 1}
+                {'status': http.HTTPStatus.UNPROCESSABLE_ENTITY, 'length': 1}
         ),
         (
                 {'count': 50, 'size': 0, 'name': 'The Star'},
-                {'status': 422, 'length': 1}
+                {'status': http.HTTPStatus.UNPROCESSABLE_ENTITY, 'length': 1}
         ),
         (
                 {'count': 50, 'size': -1, 'name': 'The Star'},
-                {'status': 422, 'length': 1}
+                {'status': http.HTTPStatus.UNPROCESSABLE_ENTITY, 'length': 1}
         )
 
     ]
@@ -74,7 +75,7 @@ async def test_film_id(fill_test_data, make_get_request):
     response = await make_get_request(url)
     resp = await response.json()
     # Проверяем ответ
-    assert response.status == 200
+    assert response.status == http.HTTPStatus.OK
     assert resp['id'] == id_film
 
 
@@ -90,7 +91,7 @@ async def test_film_redis(fill_test_data, make_get_request, clear_elastic):
     resp = await response.json()
 
     # Проверяем ответ
-    assert response.status == 200
+    assert response.status == http.HTTPStatus.OK
     assert resp['id'] == id_film
 
     # Очистка Elastic для проверки Redis
@@ -99,5 +100,5 @@ async def test_film_redis(fill_test_data, make_get_request, clear_elastic):
     url = f'http://{test_settings.service_url}:8000/api/v1/films/{id_film}'
     response = await make_get_request(url)
     resp = await response.json()
-    assert response.status == 200
+    assert response.status == http.HTTPStatus.OK
     assert resp['id'] == id_film
