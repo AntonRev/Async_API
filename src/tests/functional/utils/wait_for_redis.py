@@ -1,6 +1,7 @@
 import logging.config
 import time
 
+import backoff
 from redis import Redis
 from redis.exceptions import ConnectionError
 
@@ -11,13 +12,16 @@ redis_host = TestSettings().redis_host
 logging.config.dictConfig(LOGGING)
 log = logging.getLogger('')
 
-if __name__ == '__main__':
+
+@backoff.on_exception(backoff.expo,
+                      ConnectionError,
+                      max_time=60)
+def conn_redis():
     r = Redis(redis_host)
-    while True:
-        try:
-            r.ping()
-            break
-        except ConnectionError:
-            log.info("Waiting start Redis")
-            time.sleep(1)
+    r.ping()
     log.info("Redis connected")
+
+
+if __name__ == '__main__':
+    log.info("Waiting start Redis")
+    conn_redis()
