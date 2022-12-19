@@ -29,15 +29,15 @@ ES_INDEX = 'genres'
         ),
         (
                 {'count': 50, 'size': 99999},
-                {'status': 422, 'length': 1}
+                {'status': http.HTTPStatus.UNPROCESSABLE_ENTITY, 'length': 1}
         ),
         (
                 {'count': 50, 'size': 0},
-                {'status': 422, 'length': 1}
+                {'status': http.HTTPStatus.UNPROCESSABLE_ENTITY, 'length': 1}
         ),
         (
                 {'count': 50, 'size': -1},
-                {'status': 422, 'length': 1}
+                {'status': http.HTTPStatus.UNPROCESSABLE_ENTITY, 'length': 1}
         )
 
     ]
