@@ -20,6 +20,6 @@ class Settings(BaseSettings):
     ELASTIC_PORT: int = Field(9200, env='ELASTIC_PORT')
     # Корень проекта
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+    JWT_PUBLIC_KEY: str = Field('public_key', env='JWT_PUBLIC_KEY')
 
 config = Settings()

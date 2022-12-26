@@ -55,7 +55,7 @@ class FilmService:
         self.elastic = elastic
         self.redis_helper = RedisHelper(self.redis)
 
-    async def get_all(self, page: int, page_size: int, genre: Optional[str] = None,
+    async def get_all(self, page: int, page_size: int, roles: list, genre: Optional[str] = None,
                       sort_by: Optional[FilmSorting] = None) -> list[Film]:
         """
         Get movies list, paginated and, optionally, filtered by genre and sorted
@@ -71,8 +71,9 @@ class FilmService:
             parse_raw=Film.parse_raw,
             expire=CACHE_EXPIRE_IN_SECONDS
         )
-
-        return films
+        if 'user' in roles:
+            return films
+        return films[:20]
 
     async def _get_films_from_elastic(self, page: int, page_size: int, genre: Optional[str],
                                       sort_by: Optional[FilmSorting]) -> list[Film]:

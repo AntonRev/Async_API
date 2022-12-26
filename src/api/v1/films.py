@@ -2,10 +2,11 @@ from http import HTTPStatus
 from typing import Optional
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from pydantic import BaseModel
 
 from api.v1.message_texts import MessageText
+from services.JWT import get_role
 from services.film import FilmService, FilmSorting, get_film_service
 
 router = APIRouter()
@@ -49,8 +50,9 @@ async def films_list(page: int = Query(default=1, ge=1, le=10000, alias='page[nu
                      size: int = Query(default=10, ge=1, le=10000, alias='page[size]'),
                      genre: Optional[str] = Query(default=None, alias='filter[genre]'),
                      sort: Optional[FilmSorting] = None,
+                     roles: list = Depends(get_role),
                      film_service: FilmService = Depends(get_film_service)) -> list[FilmBasic]:
-    films = await film_service.get_all(page, size, genre, sort)
+    films = await film_service.get_all(page, size, genre, sort, roles)
     return [FilmBasic(**f.dict()) for f in films]
 
 
