@@ -7,7 +7,7 @@ from core.configs import config
 
 
 def decodeJWT(token: str) -> dict:
-    """Проверка токена на валидность и декодирование"""
+    """Проверка токена на валидность, возвращает данные из токена"""
     try:
         decoded_token = jwt.decode(token, config.JWT_PUBLIC_KEY)
         return decoded_token if decoded_token["expires"] >= time.time() else None
@@ -16,6 +16,7 @@ def decodeJWT(token: str) -> dict:
 
 
 async def get_role(request: Request) -> list:
+    """Получить роли из токена"""
     body = await request.body()
     auth = request.headers.get('Authorization')
     if auth is None:
