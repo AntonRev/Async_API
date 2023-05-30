@@ -3,7 +3,7 @@ from datetime import time
 import jwt
 from fastapi import Request
 
-from core.configs import config
+from configs.configs import config
 
 
 def decodeJWT(token: str) -> dict:

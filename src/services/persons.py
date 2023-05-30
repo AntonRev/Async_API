@@ -7,7 +7,7 @@ from elasticsearch import AsyncElasticsearch, NotFoundError
 from fastapi import Depends
 
 from api.v1.common import QueryStr, Sorting
-from core.configs import config
+from configs.configs import config
 from db.elastic import get_elastic
 from db.redis import get_redis
 from models.person import Person

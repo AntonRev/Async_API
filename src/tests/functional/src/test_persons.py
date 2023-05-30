@@ -7,7 +7,7 @@ from logging.config import dictConfig
 import pytest
 
 
-from core.logger import LOGGING
+from configs.logger import LOGGING
 from tests.functional.settings import test_settings
 from tests.functional.src.common import clear_elastic, make_get_request
 from tests.functional.testdata.query_data import QueryData

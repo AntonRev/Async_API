@@ -3,7 +3,7 @@ import time
 
 from elasticsearch import Elasticsearch
 
-from core.logger import LOGGING
+from configs.logger import LOGGING
 from tests.functional.settings import TestSettings
 
 es_host = TestSettings().es_host

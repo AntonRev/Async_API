@@ -7,8 +7,8 @@ from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 
 from api.v1 import films, genres, persons
-from core.configs import config
-from core.logger import LOGGING
+from configs.configs import config
+from configs.logger import LOGGING
 from db import elastic, redis
 
 app = FastAPI(
