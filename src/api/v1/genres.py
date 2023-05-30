@@ -5,20 +5,12 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
+from api.respons_model.genres import GenreBasic, Genre
 from api.v1.common import QueryStr, get_parameters
 from api.v1.message_texts import MessageText
 from services.genres import GenreService, get_service
 
 router = APIRouter()
-
-
-class GenreBasic(BaseModel):
-    id: UUID
-    name: str
-
-
-class Genre(GenreBasic):
-    description: Optional[str]
 
 
 @router.get('/', response_model=list[GenreBasic],

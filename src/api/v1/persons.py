@@ -3,26 +3,13 @@ from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel
 
+from api.respons_model.persons import PersonBase, Person
 from api.v1.common import QueryStr, Sorting, get_parameters
 from api.v1.message_texts import MessageText
 from services.persons import PersonService, get_service
 
 router = APIRouter()
-
-
-class PersonBase(BaseModel):
-    """
-    Basic Person view model
-    """
-    id: UUID
-    full_name: str
-
-
-class Person(PersonBase):
-    films_id: list[UUID] | None
-    role: list[str] | None
 
 
 @router.get('/', response_model=list[PersonBase],

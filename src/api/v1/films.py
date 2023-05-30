@@ -2,42 +2,13 @@ from http import HTTPStatus
 from typing import Optional
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from api.v1.message_texts import MessageText
 from services.JWT import get_role
 from services.film import FilmService, FilmSorting, get_film_service
-
+from api.respons_model.film import FilmBasic, Film
 router = APIRouter()
-
-
-class PersonInfo(BaseModel):
-    """
-    Basic person view model (nested model for film view models)
-    """
-    id: UUID
-    name: str
-
-
-class FilmBasic(BaseModel):
-    """
-    Basic film view model (for films list)
-    """
-    id: UUID
-    title: str
-    imdb_rating: Optional[float]
-
-
-class Film(FilmBasic):
-    """
-    Film view model (for film details)
-    """
-    genre: list[str]
-    description: Optional[str]
-    director: list[str]
-    actors: list[PersonInfo]
-    writers: list[PersonInfo]
 
 
 @router.get('/',
